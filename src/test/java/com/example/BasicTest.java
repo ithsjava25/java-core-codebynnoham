@@ -145,13 +145,13 @@ class BasicTest {
                 assertThat(warehouse.getProducts()).hasSize(1);
 
                 // Act
-                warehouse.remove(milk.uuid());
+                warehouse.remove(milk.getId());
 
                 // Assert
                 assertThat(warehouse.isEmpty())
                         .as("Warehouse should be empty after the only product is removed.")
                         .isTrue();
-                assertThat(warehouse.getProductById(milk.uuid()))
+                assertThat(warehouse.getProductById(milk.getId()))
                         .as("The removed product should no longer be found.")
                         .isEmpty();
             }
@@ -232,13 +232,15 @@ class BasicTest {
                 warehouse.addProduct(laptop);
 
                 // Act
-                List<Perishable> expiredItems = warehouse.expiredProducts();
+                //List<Perishable> expiredItems = warehouse.expiredProducts();
+                List<Product> expiredItems = warehouse.expiredProducts();
+
 
                 // Assert
                 assertThat(expiredItems)
                         .as("Only products that have passed their expiration date should be returned.")
                         .hasSize(1)
-                        .containsExactly((Perishable) oldMilk);
+                        .containsExactly( oldMilk);
             }
 
             @Test
@@ -251,8 +253,16 @@ class BasicTest {
                 warehouse.addProduct(heavyLaptop);
 
                 // Act
-                BigDecimal totalShippingCost = warehouse.shippableProducts().stream()
+                /*  BigDecimal totalShippingCost = warehouse.shippableProducts().stream()
                         .map(Shippable::calculateShippingCost)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add); */
+
+                BigDecimal totalShippingCost = warehouse.getProductMap().values().stream()
+                        .filter(p -> p instanceof Shippable)
+                        .map(p -> {
+                            Shippable shippable = (Shippable) p;
+                            return shippable.calculateShippingCost();
+                        })
                         .reduce(BigDecimal.ZERO, BigDecimal::add);
 
                 // Assert
