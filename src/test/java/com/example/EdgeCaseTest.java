@@ -74,7 +74,7 @@ class EdgeCaseTest {
             assertThat(filtered)
                     .as("Should include products at exact boundaries but exclude those outside")
                     .hasSize(3)
-                    .extracting(Product::name)
+                    .extracting(Product::getName)
                     .containsExactlyInAnyOrder("MinPrice", "MaxPrice", "InRange");
         }
 
@@ -116,7 +116,7 @@ class EdgeCaseTest {
             assertThat(expiringWithin3Days)
                     .as("Should find products expiring within the specified window (not already expired)")
                     .hasSize(3)
-                    .extracting(p -> ((Product) p).name())
+                    .extracting(p -> ((Product) p).getName())
                     .containsExactlyInAnyOrder("Today", "Tomorrow", "In3Days");
         }
 
@@ -149,7 +149,7 @@ class EdgeCaseTest {
             assertThat(milkProducts)
                     .as("Should find all products containing 'milk' regardless of case")
                     .hasSize(4)
-                    .extracting(Product::name)
+                    .extracting(Product::getName)
                     .containsExactlyInAnyOrder("Organic Milk 2%", "MILK Chocolate", "Almond Milk", "Milkshake Mix");
         }
     }
@@ -214,7 +214,7 @@ class EdgeCaseTest {
             assertThat(outliers)
                     .as("Should identify statistical outliers beyond 2 standard deviations")
                     .hasSize(2)
-                    .extracting(Product::name)
+                    .extracting(Product::getName)
                     .containsExactlyInAnyOrder("Expensive", "Cheap");
         }
 
@@ -388,8 +388,8 @@ class EdgeCaseTest {
                     .isEqualByComparingTo(new BigDecimal("397.63")); // 1590.50 / 4
             assertThat(stats.getExpiredCount()).isEqualTo(1);
             assertThat(stats.getCategoryCount()).isEqualTo(2);
-            assertThat(stats.getMostExpensiveProduct().name()).isEqualTo("Laptop");
-            assertThat(stats.getCheapestProduct().name()).isEqualTo("Milk");
+            assertThat(stats.getMostExpensiveProduct().getName()).isEqualTo("Laptop");
+            assertThat(stats.getCheapestProduct().getName()).isEqualTo("Milk");
         }
     }
 }
