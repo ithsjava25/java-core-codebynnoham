@@ -58,6 +58,11 @@ public final class Warehouse {
         return WAREHOUSE_CACHE_MAP.computeIfAbsent(validatedName, key -> new Warehouse(key));
     }
 
+    public static Warehouse getInstance() {
+        return getInstance("Default");
+    }
+
+
     // Method to add a product to a Warehouse's productMap
     public void addProduct(Product product) {
         if (product == null) {
@@ -66,11 +71,12 @@ public final class Warehouse {
         }
         if (productMap.containsKey(product.getId())) {
             log.warn("Product with ID: {} already exists in warehouse: {}. Existing product will be overwritten.", product.getId(), warehouseName);
-        } else {
-            log.info("Successfully added product with ID: {} to warehouse:{}.", product.getId(), warehouseName);
+            throw new IllegalArgumentException("Product with that id already exists, use updateProduct for updates.");
         }
+        log.info("Successfully added product with ID: {} to warehouse:{}.", product.getId(), warehouseName);
         productMap.put(product.getId(), product);
     }
+    //}
 
     // Method to return all product from a Warehouse's productMap
     public List<Product> getProducts() {

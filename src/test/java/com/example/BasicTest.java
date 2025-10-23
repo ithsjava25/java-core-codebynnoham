@@ -216,14 +216,15 @@ class BasicTest {
                 BigDecimal newPrice = new BigDecimal("17.00");
 
                 // Act
-                warehouse.updateProductPrice(milk.uuid(), newPrice);
+                warehouse.updateProductPrice(milk.getId(), newPrice);
 
                 // Assert
-                assertThat(warehouse.getProductById(milk.uuid()))
+                assertThat(warehouse.getProductById(milk.getId()))
                         .as("The product's price should be updated to the new value.")
                         .isPresent()
                         .hasValueSatisfying(product ->
-                                assertThat(product.price()).isEqualByComparingTo(newPrice)
+                                assertThat(product.getPrice()).isEqualByComparingTo(newPrice)
+                                //assertThat(product.price()).isEqualByComparingTo(newPrice)
                         );
             }
 
